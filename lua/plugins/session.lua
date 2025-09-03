@@ -3,6 +3,7 @@ return {
   config = function()
     require("auto-session").setup({
       auto_session_suppress_dirs = { "~/", "~/workspace", "~/labs", "/" },
+      auto_save = true,
       session_lens = {
         load_on_setup = true,
         theme_conf = { border = true },

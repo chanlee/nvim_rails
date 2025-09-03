@@ -1,37 +1,43 @@
+local keyMapper = require('utils.keyMapper').mapKey
+
 return {
   {
     "williamboman/mason.nvim",
     config = function()
-      require("mason").setup()
+      require('mason').setup()
     end
   },
   {
     "williamboman/mason-lspconfig.nvim",
     config = function()
-      require("mason-lspconfig").setup({
-        ensure_installed = { "lua_ls", "ts_ls", "ruby_lsp" }
+      require('mason-lspconfig').setup({
+        ensure_installed = { "lua_ls", "biome", "pylsp", "solargraph" }
       })
     end
   },
   {
     "neovim/nvim-lspconfig",
     config = function()
-      local capabilities = require('cmp_nvim_lsp').default_capabilities()
+      local lspconfig = require('lspconfig')
+      lspconfig.lua_ls.setup({})
+      lspconfig.biome.setup({})
+      lspconfig.pylsp.setup({})
+      lspconfig.solargraph.setup({
+        settings = {
+          solargraph = {
+            diagnostics = true,
+            completion = true,
+            formatting = true,
+          }
+        }
+      })
 
-      local lspconfig = require("lspconfig")
-      lspconfig.lua_ls.setup({
-        capabilities = capabilities
-      })
-      lspconfig.ts_ls.setup({
-        capabilities = capabilities
-      })
-      lspconfig.ruby_lsp.setup({
-        capabilities = capabilities
-      })
-
-      vim.keymap.set('n', 'K', vim.lsp.buf.hover, {})
-      vim.keymap.set('n', 'gd', vim.lsp.buf.definition, {})
-      vim.keymap.set({'n', 'v'}, '<leader>ca', vim.lsp.buf.code_action, {})
+      -- vim.lsp.buf.hover
+      -- vim.lsp.buf.definition
+      -- vim.lsp.buf.code_action
+      keyMapper('K', vim.lsp.buf.hover)
+      keyMapper('gd', vim.lsp.buf.definition)
+      keyMapper('<leader>ca', vim.lsp.buf.code_action)
     end
   }
 }

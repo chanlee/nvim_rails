@@ -2,11 +2,40 @@
 
 ## 기본 사용법
 
-### 매크로 실행
+### 최초 설치 (macOS)
 
--   `q+레지스트명` (qa, qb, …) -> `q` 종료
--   `@+레지스트명`, `숫자+@+레지스트명`(반복)
--   또는 `@@` 직전 매크로
+1. **Homebrew 설치** (이미 설치되어 있다면 생략)
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+2. **Neovim 설치**
+
+```bash
+brew install neovim
+```
+
+3. **필수 도구 설치**
+
+```bash
+brew install stylua      # Lua 포매터
+brew install ripgrep     # 빠른 텍스트 검색
+```
+
+4. **설정 디렉토리 생성 및 복사**
+
+```bash
+mkdir -p ~/.config/nvim
+# 이 저장소의 파일들을 ~/.config/nvim/ 디렉토리에 복사
+```
+
+5. **Neovim 실행 및 플러그인 설치**
+
+```bash
+nvim
+# Neovim 실행 후 자동으로 플러그인이 설치됩니다
+```
 
 ### 설정 업데이트
 

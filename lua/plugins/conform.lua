@@ -9,7 +9,10 @@ return {
 				python = { "isort", "black" },
 				javascript = { "prettierd", "prettier", stop_after_first = true },
 				typescript = { "prettierd", "prettier", stop_after_first = true },
-				ruby = { "rubocop" },
+				ruby = { 
+					"rubocop",
+					args = { "--autocorrect-all", "--stdin", "%" }
+				},
 			},
 			format_on_save = {
 				timeout_ms = 500,

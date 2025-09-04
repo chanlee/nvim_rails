@@ -259,3 +259,22 @@ brew install ripgrep     # 빠른 텍스트 검색
 2. **플러그인 동기화**: `:Lazy sync`
 3. **플러그인 상태 확인**: `:Lazy`
 4. **설정 리로드**: `:source %`
+
+---
+
+## 업데이트 (2025-09-04)
+
+-   Ruby Project 에서 코드 포매팅을 위해 프로젝트 루트에 .rubocop.yml 파일을 생성하고 설정을 추가해야 합니다.
+
+```yml
+# .rubocop.yml
+AllCops:
+    NewCops: enable
+    TargetRubyVersion: 3.0
+
+Layout/IndentationWidth:
+    Width: 2
+
+Layout/IndentationConsistency:
+    EnforcedStyle: normal
+```

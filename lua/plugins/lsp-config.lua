@@ -18,11 +18,7 @@ return {
 	{
 		"neovim/nvim-lspconfig",
 		config = function()
-			local lspconfig = require("lspconfig")
-			lspconfig.lua_ls.setup({})
-			lspconfig.biome.setup({})
-			lspconfig.pylsp.setup({})
-			lspconfig.solargraph.setup({
+			vim.lsp.config("solargraph", {
 				settings = {
 					solargraph = {
 						diagnostics = true,
@@ -31,10 +27,8 @@ return {
 					},
 				},
 			})
+			vim.lsp.enable({ "lua_ls", "biome", "pylsp", "solargraph" })
 
-			-- vim.lsp.buf.hover
-			-- vim.lsp.buf.definition
-			-- vim.lsp.buf.code_action
 			keyMapper("K", vim.lsp.buf.hover)
 			keyMapper("gd", vim.lsp.buf.definition)
 			keyMapper("<leader>ca", vim.lsp.buf.code_action)

@@ -53,7 +53,7 @@
 - 지원 언어:
   - 기본: `lua`, `python`, `javascript`, `html`, `markdown`, `ruby`
   - Node/TS: `typescript`, `tsx`, `jsdoc`, `json`, `jsonc`, `yaml`, `css`, `scss`
-  - Rails/Ruby: `embedded_template`(ERB), `eruby`, `rbs`
+  - Rails/Ruby: `embedded_template`(ERB), `rbs`
   - 공통: `bash`, `dockerfile`, `gitignore`, `gitcommit`, `diff`, `vim`, `vimdoc`, `regex`, `markdown_inline`
 - 하이라이트/인덴트 활성화
 

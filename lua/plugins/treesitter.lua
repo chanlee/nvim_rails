@@ -10,8 +10,8 @@ return {
           "lua", "python", "javascript", "html", "markdown", "ruby",
           -- Node/TypeScript
           "typescript", "tsx", "jsdoc", "json", "jsonc", "yaml", "css", "scss",
-          -- Rails/Ruby
-          "embedded_template", "eruby", "rbs",
+          -- Rails/Ruby (ERB는 embedded_template 파서가 처리)
+          "embedded_template", "rbs",
           -- 공통
           "bash", "dockerfile", "gitignore", "gitcommit", "diff",
           "vim", "vimdoc", "regex", "markdown_inline",

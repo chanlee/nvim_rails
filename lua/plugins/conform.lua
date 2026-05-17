@@ -9,9 +9,11 @@ return {
 				python = { "isort", "black" },
 				javascript = { "prettierd", "prettier", stop_after_first = true },
 				typescript = { "prettierd", "prettier", stop_after_first = true },
-				ruby = { 
-					"rubocop",
-					args = { "--autocorrect-all", "--stdin", "%" }
+				ruby = { "rubocop" },
+			},
+			formatters = {
+				rubocop = {
+					prepend_args = { "--autocorrect-all" },
 				},
 			},
 			format_on_save = {
@@ -19,8 +21,8 @@ return {
 				lsp_fallback = true,
 			},
 		})
-		-- 수동 포매팅 키 매핑 추가
-		vim.keymap.set({ "n", "v" }, "<leader>mp", function()
+		-- 수동 포매팅 키 매핑 (markdown-preview <leader>mp와 충돌하므로 <leader>cf 사용)
+		vim.keymap.set({ "n", "v" }, "<leader>cf", function()
 			conform.format({
 				lsp_fallback = true,
 				async = false,

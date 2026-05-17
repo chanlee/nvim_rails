@@ -50,7 +50,10 @@ brew install --cask font-jetbrains-mono-nerd-font
   ```bash
   gem install solargraph rubocop
   ```
+  - 디버깅까지 쓰려면 프로젝트에서 `bundle add debug`
 - Python 작업용: `python3`, `pip`
+  - 디버깅까지 쓰려면 `pip install debugpy` (또는 `:MasonInstall debugpy`)
+- Node/TypeScript 작업용: `node` (≥ 18) — `ts_ls`는 Mason이 자동 설치
 - Lua 포매터: `brew install stylua`
 
 > 포매터·LSP 서버 대부분은 첫 실행 시 **Mason**이 자동으로 설치합니다. 위 목록은 시스템 단에서 미리 있어야 편리한 것들입니다.
@@ -134,7 +137,7 @@ nvim
 :Mason
 ```
 
-- 기본 활성화 서버: `lua_ls`, `biome`, `pylsp`, `solargraph`
+- 기본 활성화 서버: `lua_ls`, `biome`, `pylsp`, `solargraph`, `ts_ls`
 - 누락된 서버가 있다면 해당 줄에서 `i`를 눌러 설치.
 
 ### 4) Treesitter 파서
@@ -174,7 +177,10 @@ Copilot 인라인 제안을 쓰려면 한 번 인증이 필요합니다.
 | `<leader>fg` | 내용 검색 |
 | `gd` / `K` | 정의로 이동 / 호버 |
 | `<leader>ca` | 코드 액션 |
-| `<leader>mp` | 수동 포매팅 |
+| `<leader>cf` | 수동 포매팅 |
+| `<leader>mp` | 마크다운 미리보기 토글 |
+| `<leader>hs` / `]c` | hunk stage / 다음 hunk |
+| `gcc` / `ysiw)` | 라인 코멘트 / 단어를 `()`로 감싸기 |
 | `<C-t>` | 플로팅 터미널 |
 | `<C-]>` | Copilot 제안 요청 |
 

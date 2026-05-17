@@ -7,6 +7,8 @@
 - **인덴트**: `tabstop=shiftwidth=softtabstop=2`, `expandtab`, `smartindent`
 - **Ruby 파일**: 동일하게 2-space, `autoindent`/`smartindent` 적용
 
+> 키맵이 많아 외우기 어렵다면 `<leader>` 누르고 잠시 대기하면 **which-key**가 가능한 키를 보여줍니다.
+
 ---
 
 ### 🎨 UI & 테마
@@ -38,7 +40,7 @@
 ### 🔧 LSP (Language Server)
 
 - 관리: Mason + mason-lspconfig + nvim-lspconfig
-- 기본 활성화 서버: `lua_ls`, `biome`, `pylsp`, `solargraph`
+- 기본 활성화 서버: `lua_ls`, `biome`, `pylsp`, `solargraph`, `ts_ls`
 - 키맵:
   - `K` — 심볼 호버/문서
   - `gd` — 정의로 이동
@@ -48,7 +50,11 @@
 
 ### 🌳 Treesitter
 
-- 지원 언어: `lua`, `python`, `javascript`, `html`, `markdown`, `ruby`
+- 지원 언어:
+  - 기본: `lua`, `python`, `javascript`, `html`, `markdown`, `ruby`
+  - Node/TS: `typescript`, `tsx`, `jsdoc`, `json`, `jsonc`, `yaml`, `css`, `scss`
+  - Rails/Ruby: `embedded_template`(ERB), `eruby`, `rbs`
+  - 공통: `bash`, `dockerfile`, `gitignore`, `gitcommit`, `diff`, `vim`, `vimdoc`, `regex`, `markdown_inline`
 - 하이라이트/인덴트 활성화
 
 ---
@@ -79,42 +85,45 @@
 
 ---
 
-### 🛠️ 포매터 & 린터
+### 🛠️ 포매터 (Conform)
 
-- **Conform (format-on-save)**
-  - 언어별 포매터: `lua → stylua`, `python → isort + black`, `javascript/typescript → prettierd/prettier`, `ruby → rubocop --autocorrect-all`
-  - 저장 시 자동 포매팅 (timeout 500ms, LSP fallback)
-  - `<leader>mp` — 수동 포매팅 (비주얼 모드 범위 지원)
+- 언어별 포매터:
+  - `lua` → `stylua`
+  - `python` → `isort` + `black`
+  - `javascript`/`typescript` → `prettierd` (없으면 `prettier`)
+  - `ruby` → `rubocop --autocorrect-all`
+- 저장 시 자동 포매팅 (timeout 500ms, LSP fallback)
+- `<leader>cf` — 수동 포매팅 (비주얼 모드 범위 지원)
 
-- **None-ls (null-ls)**
-  - 포매팅: `stylua`, `prettier`, `black`, `isort`, `rubocop`
-  - 진단: `rubocop`
-  - `<leader>gf` — LSP 포맷 호출 (`vim.lsp.buf.format`)
+> 이전에 있던 `none-ls`는 Conform과 기능이 중복되어 제거했습니다. rubocop 진단은 solargraph LSP에서 제공됩니다.
 
 ---
 
 ### 📝 Markdown
 
 - **markdown-preview.nvim**
-  - `<leader>mp` — 미리보기 토글 (`MarkdownPreviewToggle`)
-    - ⚠️ Conform의 `<leader>mp`(수동 포매팅)와 키가 겹칩니다. markdown 파일을 열면 markdown-preview가 로드되며, 충돌 시 마지막에 등록된 매핑이 우선됩니다.
+  - `<leader>mp` — 브라우저 미리보기 토글 (`MarkdownPreviewToggle`)
   - 명령: `:MarkdownPreview`, `:MarkdownPreviewStop`
 - **render-markdown.nvim**
   - `<leader>mr` — 인-에디터 렌더링 토글 (`RenderMarkdown toggle`)
 
 ---
 
-### 🐛 디버깅 (nvim-dap + dap-ui + dap-ruby)
+### 🐛 디버깅 (nvim-dap + dap-ui + dap-ruby + dap-python)
 
 - `<leader>dt` — 브레이크포인트 토글
 - `<leader>dc` — 계속 실행
 - `<leader>dx` — 세션 종료
 - `<leader>do` — 스텝 오버
 - 디버깅 시작/종료 시 dap-ui 자동 열림/닫힘
+- **Ruby**: `dap-ruby`(rdbg) — `bundle add debug` 필요
+- **Python**: `dap-python`(debugpy) — `pip install debugpy` 또는 Mason으로 설치
 
 ---
 
-### 📝 Git 통합 (vim-fugitive)
+### 📝 Git 통합
+
+#### vim-fugitive (파일 단위)
 
 - `<leader>gs` — Git 상태 (`:Git`)
 - `<leader>gb` — Git blame
@@ -127,6 +136,20 @@
 - `<leader>gA` — 전체 add (`Git add .`)
 - fugitive 버퍼 내부: `s` — `Git add %:p`, `u` — `Git reset HEAD %:p`
 - 커스텀 명령: `:Gadd [path]` — 경로 지정 시 `Git add <path>`, 미지정 시 `Gwrite`
+
+#### gitsigns.nvim (hunk 단위, 인라인)
+
+- 사인 컬럼에 `+/~/_` 표시 — 변경된 라인 인식
+- `]c` / `[c` — 다음/이전 hunk 이동
+- `<leader>hs` — hunk stage (visual 범위 지원)
+- `<leader>hr` — hunk reset (visual 범위 지원)
+- `<leader>hS` — 버퍼 전체 stage
+- `<leader>hR` — 버퍼 전체 reset
+- `<leader>hp` — hunk preview
+- `<leader>hb` — 현재 라인 blame (full)
+- `<leader>hd` — 현재 버퍼 diff
+- `<leader>htb` — 라인 blame 표시 토글
+- `<leader>htd` — 삭제된 라인 표시 토글
 
 ---
 
@@ -160,9 +183,34 @@
 
 ---
 
+### ✂️ 편집 보조
+
+- **nvim-surround** — 괄호/따옴표 둘러싸기
+  - `ys{motion}{char}` — 추가 (`ysiw)` → 단어를 `()`로 감싸기)
+  - `cs{old}{new}` — 변경 (`cs"'` → `"…"` → `'…'`)
+  - `ds{char}` — 제거 (`ds"` → 감싼 `"` 제거)
+- **nvim-autopairs** — 괄호/따옴표 자동 닫기 (Treesitter 인식)
+- **Comment.nvim** — 코멘트 토글
+  - `gcc` — 현재 줄 코멘트 토글
+  - `gc{motion}` — 모션 범위 코멘트 (예: `gcap`)
+  - 비주얼 모드: `gc` — 선택 범위 코멘트
+  - ERB/JSX 등 임베디드 파일에서는 `ts-context-commentstring`가 자동으로 적절한 코멘트 문법 적용
+
+---
+
+### 🔑 which-key
+
+- `<leader>` 누르고 잠시 대기 → 가능한 다음 키와 그룹 라벨이 팝업으로 표시
+- `<leader>?` — 현재 버퍼에서 사용 가능한 키맵 전체 보기
+- 등록된 그룹: `c`(Code/Conform), `d`(Debug), `f`(Find), `g`(Git), `h`(Hunk), `m`(Markdown), `q`(Buffer close), `s`(Session)
+
+---
+
 ### 📌 명령어 팁
 
 - 플러그인 관리: `:Lazy`, `:Lazy update`, `:Lazy sync`
 - Treesitter 업데이트: `:TSUpdate`
 - Mason UI: `:Mason`
+- LSP 정보: `:LspInfo`
+- Conform 포매터 정보: `:ConformInfo`
 - 설정 리로드: `:source %`

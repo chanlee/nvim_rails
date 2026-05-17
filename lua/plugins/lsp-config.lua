@@ -11,7 +11,7 @@ return {
 		"williamboman/mason-lspconfig.nvim",
 		config = function()
 			require("mason-lspconfig").setup({
-				ensure_installed = { "lua_ls", "biome", "pylsp", "solargraph" },
+				ensure_installed = { "lua_ls", "biome", "pylsp", "solargraph", "ts_ls" },
 			})
 		end,
 	},
@@ -27,7 +27,7 @@ return {
 					},
 				},
 			})
-			vim.lsp.enable({ "lua_ls", "biome", "pylsp", "solargraph" })
+			vim.lsp.enable({ "lua_ls", "biome", "pylsp", "solargraph", "ts_ls" })
 
 			keyMapper("K", vim.lsp.buf.hover)
 			keyMapper("gd", vim.lsp.buf.definition)

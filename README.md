@@ -1,141 +1,253 @@
-# Neovim 설정 가이드
+# Neovim 설정 (nvim_rails)
 
-## 기본 설정
+Ruby/Rails 작업을 중심으로 LSP, Copilot, 디버깅, Git, 검색 등을 갖춘 개인용 Neovim 설정입니다. 이 문서는 **처음 받아오는 사람도 그대로 따라 하면 동작하는 상태**가 되도록 단계별로 안내합니다.
 
-### 에디터 설정
-
-- **Leader Key**: Space (`<leader>`)
-- **탭/인덴트**: 2 spaces
-- **클립보드**: 시스템 클립보드 연동 (unnamedplus)
-
-### 일반 단축키
-
-- **매크로 실행**:
-    - `q + 레지스트명` (qa, qb, ...) → `q` 종료
-    - `@ + 레지스트명` 또는 `숫자 + @ + 레지스트명` (반복 실행)
-    - `@@` (직전 매크로 실행)
-- **설정 다시 로드**: `:source %`
+> 키맵·플러그인별 상세 사용법은 [USAGE.md](./USAGE.md)를 참고하세요.
 
 ---
 
-## 플러그인 목록 및 사용법
+## 1. 사전 준비물
 
-### 1. **Alpha** - 스타트업 대시보드
+설치는 macOS 기준으로 작성되었습니다. Linux도 패키지 매니저만 바꾸면 동일하게 동작합니다.
 
-- **패키지**: `goolord/alpha-nvim`
-- **기능**: Neovim 시작 시 격자무늬 대시보드 표시
-- **단축키**: 없음 (자동 실행)
+### 1) Neovim 0.10 이상
 
-### 2. **Catppuccin** - 컬러 테마
+```bash
+# macOS (Homebrew)
+brew install neovim
 
-- **패키지**: `catppuccin/nvim`
-- **기능**: Catppuccin 컬러 스키마 적용
-- **단축키**: 없음 (자동 적용)
+# Ubuntu/Debian
+sudo apt install neovim
+```
 
-### 3. **Completion** - 자동완성 엔진
+설치 후 버전 확인:
 
-- **패키지**: `hrsh7th/nvim-cmp` (+ cmp-nvim-lsp, LuaSnip, friendly-snippets)
-- **기능**: LSP 기반 자동완성, 스니펫 지원
-- **단축키**:
-    - `<Tab>`: 다음 완성 항목 선택
-    - `<S-Tab>`: 이전 완성 항목 선택
-    - `<C-b>`: 문서 위로 스크롤
-    - `<C-f>`: 문서 아래 스크롤
-    - `<C-e>`: 자동완성 취소
-    - `<CR>`: 완성 항목 선택 확인
+```bash
+nvim --version | head -n 1   # NVIM v0.10.x 이상이면 OK
+```
 
-### 4. **Debugging** - DAP (Debug Adapter Protocol)
+### 2) 필수 도구
 
-- **패키지**: `mfussenegger/nvim-dap` (+ nvim-dap-ui, nvim-dap-ruby)
-- **기능**: Ruby, Lua 등 디버깅 지원
-- **단축키**:
-    - `<Leader>dt`: 중단점 토글
-    - `<Leader>dc`: 디버깅 계속 실행
-    - `<Leader>dx`: 디버깅 종료
-    - `<Leader>do`: 다음 줄로 이동 (Step Over)
+| 도구 | 용도 | 설치 명령 |
+|------|------|-----------|
+| **git** | 설정 클론, fugitive(Git 통합) | `brew install git` |
+| **ripgrep** | Telescope 내용 검색(`<leader>fg`) | `brew install ripgrep` |
+| **fd** | Telescope 파일 검색 가속(선택) | `brew install fd` |
+| **node.js ≥ 18** | Copilot, Markdown Preview | `brew install node` |
+| **Nerd Font** | 파일/탭 아이콘 정상 표시 | 아래 참고 |
 
-### 5. **Floaterm** - 부동 터미널
+#### Nerd Font 설치 & 적용
 
-- **패키지**: `nvzone/floaterm`
-- **기능**: 에디터 위에 떠있는 터미널 윈도우
-- **단축키**:
-    - `<C-t>`: 부동 터미널 토글
+```bash
+brew install --cask font-jetbrains-mono-nerd-font
+```
 
-### 6. **LSP Config** - 언어 서버 설정
+설치 후 **사용 중인 터미널(iTerm2/Terminal/Alacritty 등)에서 폰트를 Nerd Font로 변경**해야 아이콘이 정상 표시됩니다.
 
-- **패키지**: `williamboman/mason.nvim`, `mason-lspconfig.nvim`, `neovim/nvim-lspconfig`
-- **설치된 LSP**: Lua (lua_ls), TypeScript (ts_ls), Ruby (ruby_lsp)
-- **기능**: 언어별 자동완성, 정의 점프, 코드 액션
-- **단축키**:
-    - `K`: 호버 문서 표시 (타입/설명)
-    - `gd`: 정의로 이동
-    - `<Leader>ca`: 코드 액션 제시
+### 3) 언어별 런타임 (사용하는 언어만)
 
-### 7. **Lualine** - 상태 줄
+- Ruby 작업용: `ruby`, `bundle`, `solargraph`, `rubocop`
+  ```bash
+  gem install solargraph rubocop
+  ```
+- Python 작업용: `python3`, `pip`
+- Lua 포매터: `brew install stylua`
 
-- **패키지**: `nvim-lualine/lualine.nvim`
-- **기능**: 하단에 모드, 파일명, 줄/열 정보 표시
-- **테마**: Dracula
-- **단축키**: 없음 (자동 표시)
-
-### 8. **Neo-tree** - 파일 탐색기
-
-- **패키지**: `nvim-neo-tree/neo-tree.nvim`
-- **기능**: 좌측 사이드바에서 파일/폴더 탐색
-- **단축키**:
-    - `<C-n>`: Neo-tree 토글
-
-### 9. **None-ls** - 포맷팅 및 린팅
-
-- **패키지**: `nvimtools/none-ls.nvim`
-- **지원 포맷터/린터**:
-    - Stylua (Lua)
-    - Prettier (JavaScript, TypeScript, CSS, HTML, JSON, Markdown)
-    - Black, isort (Python)
-    - Rubocop (Ruby - 포맷팅 + 린팅)
-- **단축키**:
-    - `<Leader>gf`: 파일 포맷팅
-- **설치 필요**:
-    ```bash
-    brew install stylua
-    brew install ripgrep
-    :MasonInstall rubocop
-    ```
-
-### 10. **Smartbufs** - 스마트 버퍼 관리
-
-- **패키지**: `johann2357/nvim-smartbufs`
-- **기능**: 탭라인 표시, 버퍼 간 쉬운 이동, 터미널 관리
-- **단축키**:
-    - `<Leader>1-9`: 버퍼 1-9로 이동
-    - `<Left>`: 이전 버퍼로 이동
-    - `<Right>`: 다음 버퍼로 이동
-    - `<Leader>c1-4`: 터미널 버퍼 1-4로 이동
-    - `<Leader>qq`: 현재 버퍼 닫기
-    - `<Leader>q1-9`: 버퍼 1-9 닫기
-
-### 11. **Telescope** - 파일/텍스트 검색
-
-- **패키지**: `nvim-telescope/telescope.nvim` (+ telescope-ui-select)
-- **기능**: 퍼지 검색으로 파일/텍스트 찾기
-- **단축키**:
-    - `<Leader>ff`: 프로젝트 내 파일 찾기
-    - `<Leader>fg`: 파일 내용 검색 (Live Grep)
-
-### 12. **Treesitter** - 구문 분석 (AST)
-
-- **패키지**: `nvim-treesitter/nvim-treesitter`
-- **기능**: 정확한 구문 강조, 들여쓰기, 모션
-- **자동 설치**: 활성화 (auto_install)
-- **명령어**:
-    - `:TSUpdate`: 모든 파서 업데이트
-    - `:TSInstall html css ...`: 특정 언어 파서 설치
+> 포매터·LSP 서버 대부분은 첫 실행 시 **Mason**이 자동으로 설치합니다. 위 목록은 시스템 단에서 미리 있어야 편리한 것들입니다.
 
 ---
 
-## 사용 팁
+## 2. 기존 설정 백업
 
-1. **플러그인 업데이트**: Lazy.nvim 플러그인 매니저 사용
-2. **LSP와 완성치 함께 사용**: LSP 설정 후 자동완성이 활성화됨
-3. **포맷팅 전 확인**: 포맷터 설치 여부 확인 후 `<Leader>gf` 사용
-4. **디버깅 시**: DAP 시작 전 중단점 설정 (`<Leader>dt`) 후 실행 (`<Leader>dc`)
+이미 `~/.config/nvim`을 쓰고 있다면 충돌을 피하기 위해 백업해 둡니다.
+
+```bash
+mv ~/.config/nvim ~/.config/nvim.backup.$(date +%Y%m%d)
+mv ~/.local/share/nvim ~/.local/share/nvim.backup.$(date +%Y%m%d) 2>/dev/null || true
+mv ~/.local/state/nvim ~/.local/state/nvim.backup.$(date +%Y%m%d) 2>/dev/null || true
+mv ~/.cache/nvim ~/.cache/nvim.backup.$(date +%Y%m%d) 2>/dev/null || true
+```
+
+처음 설치라면 위 단계는 건너뛰어도 됩니다.
+
+---
+
+## 3. 저장소 클론
+
+```bash
+git clone git@github.com:chanlee/nvim_rails.git ~/.config/nvim
+```
+
+SSH 키가 없다면 HTTPS로:
+
+```bash
+git clone https://github.com/chanlee/nvim_rails.git ~/.config/nvim
+```
+
+---
+
+## 4. 첫 실행 — 플러그인 자동 설치
+
+```bash
+nvim
+```
+
+처음 실행하면 다음이 **자동으로** 진행됩니다.
+
+1. `lazy.nvim` 플러그인 매니저가 자기 자신을 클론
+2. `lua/plugins/` 안의 모든 플러그인을 다운로드
+3. Mason이 LSP 서버를 백그라운드로 설치
+
+설치 진행 상황은 자동으로 뜨는 Lazy 창에서 확인할 수 있고, 끝나면 `q`로 닫습니다. 도중에 에러처럼 보이는 메시지가 떠도 대부분 다음 단계에서 해결되니 일단 끝까지 기다리세요.
+
+설치가 끝난 뒤 한 번 종료했다가 다시 실행하면 상태가 깔끔합니다.
+
+```vim
+:q
+```
+
+---
+
+## 5. 사후 점검
+
+다시 `nvim`을 띄운 뒤 아래 명령으로 상태를 확인합니다.
+
+### 1) 시스템 의존성 확인
+
+```vim
+:checkhealth
+```
+
+- 빨간색 ERROR만 해결하면 됩니다. `node`, `ripgrep`, `git` 누락이 가장 흔합니다.
+
+### 2) 플러그인 상태
+
+```vim
+:Lazy
+```
+
+- 모두 `loaded` 또는 `installed` 상태여야 합니다. 실패한 항목은 `U`(update) 또는 `S`(sync)로 재시도.
+
+### 3) LSP 서버 설치 상태
+
+```vim
+:Mason
+```
+
+- 기본 활성화 서버: `lua_ls`, `biome`, `pylsp`, `solargraph`
+- 누락된 서버가 있다면 해당 줄에서 `i`를 눌러 설치.
+
+### 4) Treesitter 파서
+
+```vim
+:TSUpdate
+```
+
+- `lua`, `python`, `javascript`, `html`, `markdown`, `ruby` 파서가 자동 설치/업데이트됩니다.
+
+---
+
+## 6. GitHub Copilot 인증
+
+Copilot 인라인 제안을 쓰려면 한 번 인증이 필요합니다.
+
+```vim
+:Copilot auth
+```
+
+- 화면에 표시되는 디바이스 코드를 복사 → 안내된 URL에서 붙여넣기 → GitHub 계정으로 승인.
+- 인증 상태 확인: `:Copilot status`
+
+> 이 설정에서는 Copilot 자동 트리거가 꺼져 있습니다. 인라인 제안은 **`<C-]>`** 로 직접 요청합니다(자세한 키맵은 USAGE.md 참고).
+
+---
+
+## 7. 사용 시작
+
+자주 쓰이는 키맵 몇 가지만 먼저 외우면 됩니다.
+
+| 키 | 동작 |
+|----|------|
+| `Space` | 리더 키 |
+| `<C-n>` | 파일 탐색기 토글 |
+| `<leader>ff` | 파일 찾기 |
+| `<leader>fg` | 내용 검색 |
+| `gd` / `K` | 정의로 이동 / 호버 |
+| `<leader>ca` | 코드 액션 |
+| `<leader>mp` | 수동 포매팅 |
+| `<C-t>` | 플로팅 터미널 |
+| `<C-]>` | Copilot 제안 요청 |
+
+**전체 키맵 및 플러그인별 사용법은 [USAGE.md](./USAGE.md)에 정리되어 있습니다.**
+
+---
+
+## 8. 자주 겪는 문제
+
+### "아이콘이 □ 또는 ?로 보입니다"
+터미널 폰트가 Nerd Font가 아닙니다. 1번 단계의 Nerd Font 설치 후 터미널에서 폰트를 바꾸세요.
+
+### "`<leader>fg`에서 ripgrep is not installed 에러"
+```bash
+brew install ripgrep
+```
+
+### "Copilot이 동작하지 않습니다"
+- `:Copilot status`로 인증 상태 확인
+- `node --version`이 18 이상인지 확인
+- 인증 미완료라면 `:Copilot auth` 재실행
+
+### "LSP가 동작하지 않습니다 (호버 안 됨, gd 안 됨)"
+1. `:LspInfo` — 현재 버퍼에 연결된 서버 확인
+2. `:Mason` — 해당 언어 서버가 설치돼 있는지 확인
+3. 프로젝트 루트(`.git` 또는 `Gemfile`)에서 실행 중인지 확인
+
+### "포매팅이 동작하지 않습니다"
+- 해당 포매터가 시스템 또는 Mason에 설치되어 있는지 확인
+  - Lua: `brew install stylua`
+  - Ruby: `gem install rubocop`
+  - Python: `pip install black isort`
+- `:ConformInfo`로 현재 파일에 적용될 포매터를 확인할 수 있습니다.
+
+### "플러그인 한 개가 안 깔립니다"
+```vim
+:Lazy sync
+```
+그래도 안 되면 해당 플러그인 줄에서 `x`(clean) 후 다시 `i`(install).
+
+---
+
+## 9. 업데이트 / 유지보수
+
+```vim
+:Lazy update    " 플러그인 업데이트
+:Lazy clean     " 미사용 플러그인 제거
+:TSUpdate       " Treesitter 파서 업데이트
+:MasonUpdate    " Mason 패키지 업데이트
+```
+
+설정 파일을 수정한 뒤에는 `:source %` 또는 Neovim 재시작으로 반영하세요.
+
+---
+
+## 10. 디렉토리 구조
+
+```
+~/.config/nvim/
+├── init.lua              # 진입점 (lazy.nvim 부트스트랩)
+├── lua/
+│   ├── vim-options.lua   # 에디터 기본 옵션 (리더키, 인덴트 등)
+│   ├── plugins.lua       # lazy 플러그인 로더
+│   ├── plugins/          # 플러그인별 설정 파일
+│   └── utils/            # 공용 헬퍼 (keyMapper 등)
+├── USAGE.md              # 키맵 및 사용법 상세
+└── README.md             # 이 문서
+```
+
+---
+
+## 참고
+
+- 플러그인 매니저: [lazy.nvim](https://github.com/folke/lazy.nvim)
+- LSP 매니저: [mason.nvim](https://github.com/williamboman/mason.nvim)
+- 이슈/제안은 저장소에 등록해 주세요.

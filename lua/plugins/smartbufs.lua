@@ -64,6 +64,9 @@ return {
     -- 현재 버퍼 삭제 (이전 버퍼로 이동)
     vim.keymap.set('n', '<Leader>qq', function() require('nvim-smartbufs').close_current_buffer() end, { desc = 'Close current buffer' })
 
+    -- 모든 버퍼 삭제
+    vim.keymap.set('n', '<Leader>qa', '<Cmd>%bdelete<CR>', { desc = 'Close all buffers' })
+
     -- 인덱스별 버퍼 삭제
     vim.keymap.set('n', '<Leader>q1', function() require('nvim-smartbufs').close_buffer(1) end, { desc = 'Close buffer 1' })
     vim.keymap.set('n', '<Leader>q2', function() require('nvim-smartbufs').close_buffer(2) end, { desc = 'Close buffer 2' })

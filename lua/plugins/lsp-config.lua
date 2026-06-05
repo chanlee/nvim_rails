@@ -11,7 +11,9 @@ return {
 		"williamboman/mason-lspconfig.nvim",
 		config = function()
 			require("mason-lspconfig").setup({
-				ensure_installed = { "lua_ls", "biome", "pylsp", "solargraph", "ts_ls" },
+				ensure_installed = { "lua_ls", "biome", "pylsp", "solargraph", "ts_ls", "rust_analyzer" },
+				-- rust_analyzer는 rustaceanvim이 자체적으로 attach하므로 자동 enable에서 제외
+				automatic_enable = { exclude = { "rust_analyzer" } },
 			})
 		end,
 	},

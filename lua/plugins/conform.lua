@@ -10,6 +10,8 @@ return {
 				javascript = { "prettierd", "prettier", stop_after_first = true },
 				typescript = { "prettierd", "prettier", stop_after_first = true },
 				ruby = { "rubocop" },
+				-- Rust: rust-analyzer 내장 rustfmt 사용 (LSP formatting fallback)
+				rust = { lsp_format = "prefer" },
 			},
 			formatters = {
 				rubocop = {

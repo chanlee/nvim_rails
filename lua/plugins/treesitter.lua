@@ -12,6 +12,8 @@ return {
           "typescript", "tsx", "jsdoc", "json", "jsonc", "yaml", "css", "scss",
           -- Rails/Ruby (ERB는 embedded_template 파서가 처리)
           "embedded_template", "rbs",
+          -- Rust
+          "rust", "toml",
           -- 공통
           "bash", "dockerfile", "gitignore", "gitcommit", "diff",
           "vim", "vimdoc", "regex", "markdown_inline",

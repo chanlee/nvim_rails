@@ -54,6 +54,8 @@ brew install --cask font-jetbrains-mono-nerd-font
 - Python 작업용: `python3`, `pip`
   - 디버깅까지 쓰려면 `pip install debugpy` (또는 `:MasonInstall debugpy`)
 - Node/TypeScript 작업용: `node` (≥ 18) — `ts_ls`는 Mason이 자동 설치
+- Rust 작업용: `rustup` 으로 툴체인 설치 후 `rustup component add rustfmt clippy`
+  - LSP(`rust-analyzer`)와 디버거(`codelldb`)는 Mason이 자동 설치
 - Lua 포매터: `brew install stylua`
 
 > 포매터·LSP 서버 대부분은 첫 실행 시 **Mason**이 자동으로 설치합니다. 위 목록은 시스템 단에서 미리 있어야 편리한 것들입니다.
@@ -137,7 +139,8 @@ nvim
 :Mason
 ```
 
-- 기본 활성화 서버: `lua_ls`, `biome`, `pylsp`, `solargraph`, `ts_ls`
+- 기본 활성화 서버: `lua_ls`, `biome`, `pylsp`, `solargraph`, `ts_ls`, `rust_analyzer`
+- Rust 디버깅을 쓰려면 `codelldb`도 함께 설치되어 있어야 합니다(첫 Rust 파일 진입 시 자동 시도).
 - 누락된 서버가 있다면 해당 줄에서 `i`를 눌러 설치.
 
 ### 4) Treesitter 파서
@@ -146,7 +149,7 @@ nvim
 :TSUpdate
 ```
 
-- `lua`, `python`, `javascript`, `html`, `markdown`, `ruby` 파서가 자동 설치/업데이트됩니다.
+- `lua`, `python`, `javascript`, `html`, `markdown`, `ruby`, `rust`, `toml` 등 파서가 자동 설치/업데이트됩니다.
 
 ---
 
@@ -183,6 +186,9 @@ Copilot 인라인 제안을 쓰려면 한 번 인증이 필요합니다.
 | `gcc` / `ysiw)` | 라인 코멘트 / 단어를 `()`로 감싸기 |
 | `<C-t>` | 플로팅 터미널 |
 | `<C-]>` | Copilot 제안 요청 |
+| `<leader>rr` / `<leader>rd` | Rust runnables / debuggables |
+| `<leader>rm` / `<leader>rc` | Rust 매크로 확장 / Cargo.toml 열기 |
+| `<leader>ct` / `<leader>cu` | Crates 토글 / 단일 crate 업데이트 |
 
 **전체 키맵 및 플러그인별 사용법은 [USAGE.md](./USAGE.md)에 정리되어 있습니다.**
 

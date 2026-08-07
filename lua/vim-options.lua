@@ -29,6 +29,26 @@ opt.encoding = "UTF-8"
 opt.cmdheight = 1
 opt.scrolloff = 10
 opt.mouse:append("a")
+opt.autoread = true
+opt.updatetime = 1000
+
+-- 외부에서 파일이 변경되면 자동으로 다시 읽어온다
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI", "TermClose", "TermLeave" }, {
+  pattern = "*",
+  callback = function()
+    if vim.fn.mode() ~= "c" and vim.fn.getcmdwintype() == "" then
+      vim.cmd("checktime")
+    end
+  end,
+})
+
+-- 파일이 바뀌어 다시 읽어온 경우 알려준다
+vim.api.nvim_create_autocmd("FileChangedShellPost", {
+  pattern = "*",
+  callback = function()
+    vim.notify("파일이 외부에서 변경되어 다시 읽어왔습니다.", vim.log.levels.WARN)
+  end,
+})
 
 -- Ruby specific settings
 vim.api.nvim_create_autocmd("FileType", {
